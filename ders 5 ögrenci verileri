@@ -1,0 +1,37 @@
+CREATE DATABASE OKUL;
+GO
+
+CREATE TABLE OGRENCILER(
+    ogrNo int identity(1,1) primary key,
+    ogrAdi nvarchar(50),
+    ogrSoyadi nvarchar(50)
+);
+GO
+
+insert into OGRENCILER values ('alper','ayran');
+insert into OGRENCILER values ('Ahmet','Demir');
+insert into OGRENCILER values ('Alper','Ozan');
+select * from OGRENCILER;
+GO
+
+DECLARE @ogrNo int, @ogrAdi nvarchar(100), @ogrSoyadi nvarchar(100);
+
+DECLARE CRS CURSOR 
+FOR SELECT ogrNo, ogrAdi, ogrSoyadi FROM OGRENCILER;
+
+OPEN CRS;
+
+FETCH NEXT FROM CRS INTO @ogrNo, @ogrAdi, @ogrSoyadi;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN 
+    IF @ogrNo % 2 = 0 
+        SET @ogrAdi = @ogrAdi + '--' + @ogrSoyadi;
+    ELSE 
+        SET @ogrAdi = @ogrAdi + '--' + @ogrSoyadi;
+
+    FETCH NEXT FROM CRS INTO @ogrNo, @ogrAdi, @ogrSoyadi;
+END;
+
+CLOSE CRS;
+DEALLOCATE CRS;
